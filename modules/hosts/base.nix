@@ -44,6 +44,18 @@
         settings.PasswordAuthentication = false;
       };
 
+      systemd.user.services = {
+        # Reboot at 4am every
+        reboot = {
+          description = "Reboot Service";
+          startAt = [ "Mon 05:00:00" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "/run/current-system/sw/bin/reboot";
+          };
+        };
+      };
+
       system.stateVersion = "25.11";
 
     };
