@@ -45,9 +45,9 @@
       };
 
       systemd.user.services = {
-        # Reboot at 4am every
-        reboot = {
-          description = "Reboot Service";
+        # Reboot at 5am every day
+        auto-reboot = {
+          description = "Auto Reboot Service";
           startAt = [ "Mon 05:00:00" ];
           serviceConfig = {
             Type = "oneshot";
