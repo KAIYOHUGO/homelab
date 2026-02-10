@@ -29,9 +29,14 @@
       ...
     }:
     {
+      age.secrets."komodo-mininas.toml" = {
+        rekeyFile = ./mininas.toml.age;
+        owner = config.services.komodo-periphery.user;
+        group = config.services.komodo-periphery.group;
+      };
       services.komodo-periphery = {
         enable = true;
-        allowedIps = [ "127.0.0.1" ];
+        configFile = config.age.secrets."komodo-mininas.toml".path;
       };
     };
 
