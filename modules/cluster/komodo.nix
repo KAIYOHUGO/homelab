@@ -7,36 +7,29 @@
       ...
     }:
     {
-      virtualisation = {
-        containers.enable = true;
-        docker.enable = lib.mkForce false;
-        podman = {
-          enable = true;
-          dockerCompat = true;
-          defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
-        };
+      virtualisation.docker = {
+        enable = true;
       };
-
-      environment.systemPackages = [
-        pkgs.openssl
+      environment.systemPackages = with pkgs; [
+        openssl
       ];
-      systemd.services.komodo-periphery.serviceConfig.SupplementaryGroups = lib.mkForce [ "podman" ];
-      users.users.komodo-periphery.extraGroups = lib.mkForce [ "docker" ];
     };
   flake.modules.nixos.mininas =
     {
       config,
+      pkgs,
       ...
     }:
     {
-      age.secrets."komodo-mininas.toml" = {
-        rekeyFile = ./mininas.toml.age;
+      age.secrets."komodo.toml" = {
+        rekeyFile = ./komodo.toml.age;
         owner = config.services.komodo-periphery.user;
         group = config.services.komodo-periphery.group;
       };
+      networking.firewall.trustedInterfaces = [ "br+" ];
       services.komodo-periphery = {
         enable = true;
-        configFile = config.age.secrets."komodo-mininas.toml".path;
+        configFile = config.age.secrets."komodo.toml".path;
       };
     };
 
