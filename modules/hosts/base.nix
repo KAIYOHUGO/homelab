@@ -1,12 +1,6 @@
 {
-  inputs,
-  lib,
-  config,
-  ...
-}:
-{
   flake.modules.nixos.base =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
       nix.settings.experimental-features = [
         "nix-command"
