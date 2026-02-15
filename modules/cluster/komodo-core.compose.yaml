@@ -44,11 +44,14 @@ services:
     image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+      traefik.http.routers.komodo.rule: ${TRAEFIK_RULE}
+      traefik.http.routers.komodo.entrypoints: web, websecure
+      traefik.http.services.komodo.loadbalancer.server.port: 9120
     restart: always
     depends_on:
       - ferretdb
-    ports:
-      - 9120:9120
+    # ports:
+    #   - 9120:9120
     env_file: /run/agenix/komodo-mininas-core.env
     environment:
       KOMODO_DATABASE_ADDRESS: ferretdb:27017
