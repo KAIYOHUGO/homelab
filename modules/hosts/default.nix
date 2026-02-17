@@ -19,5 +19,5 @@
         };
       };
     in
-    (mkNixosConfig "mininas");
+    (mkNixosConfig "mininas") // (mkNixosConfig "rasp4");
 }

@@ -13,14 +13,7 @@
       environment.systemPackages = with pkgs; [
         openssl
       ];
-    };
-  flake.modules.nixos.mininas =
-    {
-      config,
-      pkgs,
-      ...
-    }:
-    {
+
       age.secrets."komodo.toml" = {
         rekeyFile = ./komodo.toml.age;
         owner = config.services.komodo-periphery.user;
@@ -30,6 +23,15 @@
       services.komodo-periphery = {
         enable = true;
         configFile = config.age.secrets."komodo.toml".path;
+      };
+    };
+  flake.modules.nixos.rasp4 =
+    { config, ... }:
+    {
+      networking.firewall = {
+        allowedTCPPorts = [
+          8120
+        ];
       };
     };
 
