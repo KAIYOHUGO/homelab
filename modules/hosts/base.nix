@@ -52,6 +52,8 @@
         dates = "weekly";
         options = "--delete-older-than 3d";
       };
+      boot.loader.grub.configurationLimit = 3;
+      boot.loader.systemd-boot.configurationLimit = 3;
 
       system.stateVersion = "25.11";
 
