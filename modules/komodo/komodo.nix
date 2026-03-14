@@ -1,5 +1,7 @@
+{ moduleWithSystem, ... }:
 {
-  flake.modules.nixos.base =
+  flake.modules.nixos.base = moduleWithSystem (
+    { inputs', ... }:
     {
       lib,
       config,
@@ -22,9 +24,11 @@
       networking.firewall.trustedInterfaces = [ "br+" ];
       services.komodo-periphery = {
         enable = true;
+        package = inputs'.nixpkgs-stable.legacyPackages.komodo;
         configFile = config.age.secrets."komodo.toml".path;
       };
-    };
+    }
+  );
   flake.modules.nixos.rasp4 =
     { config, ... }:
     {
