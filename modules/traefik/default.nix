@@ -18,6 +18,11 @@
         owner = "traefik";
         group = config.services.traefik.group;
       };
+      age.secrets."traefik.env" = {
+        rekeyFile = ./traefik.env.age;
+        owner = "traefik";
+        group = config.services.traefik.group;
+      };
 
       services.traefik = {
         enable = true;
@@ -37,8 +42,30 @@
             };
             websecure = {
               address = ":443";
-              http = {
-                tls = { };
+              http.tls = {
+                certResolver = "letsencrypt";
+                domains = [
+                  {
+                    main = "\${DOMAIN}";
+                    sans = [ "*.\${DOMAIN}" ];
+                  }
+                  {
+                    main = "homelab.\${DOMAIN}";
+                    sans = [ "*.homelab.\${DOMAIN}" ];
+                  }
+                ];
+              };
+            };
+          };
+          certificatesResolvers = {
+            letsencrypt = {
+              acme = {
+                storage = "/var/lib/traefik/cert.json";
+                # for testing
+                # caServer = "https://acme-staging-v02.api.letsencrypt.org/directory";
+                dnsChallenge = {
+                  provider = "cloudflare";
+                };
               };
             };
           };
@@ -55,6 +82,10 @@
             ];
           };
         };
+        environmentFiles = [
+          config.age.secrets."traefik.env".path
+        ];
+
       };
 
     };
