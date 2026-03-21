@@ -71,8 +71,43 @@
           };
         };
         dynamicConfigOptions = {
-          http.routers = { };
-          http.services = { };
+          http = {
+            middlewares = {
+              lan-only = {
+                ipWhiteList = {
+                  sourceRange = [
+                    # https://en.wikipedia.org/wiki/Private_network
+                    "192.168.0.0/16"
+                    "fd00::/8"
+
+                    # https://en.wikipedia.org/wiki/Loopback
+                    "127.0.0.0/8"
+                    "::1/128"
+                  ];
+                };
+              };
+            };
+
+            routers.periphery = {
+              rule = "Host(`periphery-${config.networking.hostName}.${config.homelab.lan-domain}`)";
+              service = "periphery";
+              entrypoints = [
+                "web"
+                "websecure"
+              ];
+              middlewares = [
+                "lan-only"
+              ];
+            };
+            services.periphery = {
+              loadbalancer.servers = [
+                {
+                  url = "http://localhost:${toString config.services.komodo-periphery.port}";
+                }
+              ];
+            };
+          };
+
           tls = {
             certificates = [
               {

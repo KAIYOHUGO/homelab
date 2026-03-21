@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.rasp4 =
-    { config, ... }:
+    { config, lib, ... }:
     {
       networking.firewall = {
         allowedTCPPorts = [
@@ -35,10 +35,21 @@
             rewrite = {
               "lan" = "";
             };
-            mapping = {
-              rasp4 = "192.168.1.136";
-              mininas = "192.168.1.215";
-            };
+            mapping =
+              let
+                mkMap = host: ip: {
+                  "${host}" = ip;
+                  "periphery-${host}.${config.homelab.lan-domain}" = ip;
+                };
+                mkMaps = lib.foldlAttrs (
+                  acc: name: value:
+                  acc // mkMap name value
+                ) {};
+              in
+              mkMaps {
+                rasp4 = "192.168.1.136";
+                mininas = "192.168.1.215";
+              };
           };
           blocking = {
             denylists = {
