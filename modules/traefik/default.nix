@@ -50,8 +50,8 @@
                     sans = [ "*.${config.homelab.domain}" ];
                   }
                   {
-                    main = "homelab.${config.homelab.domain}";
-                    sans = [ "*.homelab.${config.homelab.domain}" ];
+                    main = "${config.homelab.lan-domain}";
+                    sans = [ "*.${config.homelab.lan-domain}" ];
                   }
                 ];
               };

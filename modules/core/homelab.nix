@@ -10,9 +10,15 @@
         domain = lib.mkOption {
           type = lib.types.str;
         };
+        lan-domain = lib.mkOption {
+          type = lib.types.str;
+        };
       };
       config = {
-        homelab.domain = "k9h.uk";
+        homelab = {
+          domain = "k9h.uk";
+          lan-domain = "homelab.${config.homelab.domain}";
+        };
       };
     };
 
