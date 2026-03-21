@@ -46,12 +46,12 @@
                 certResolver = "letsencrypt";
                 domains = [
                   {
-                    main = "\${DOMAIN}";
-                    sans = [ "*.\${DOMAIN}" ];
+                    main = "${config.homelab.domain}";
+                    sans = [ "*.${config.homelab.domain}" ];
                   }
                   {
-                    main = "homelab.\${DOMAIN}";
-                    sans = [ "*.homelab.\${DOMAIN}" ];
+                    main = "homelab.${config.homelab.domain}";
+                    sans = [ "*.homelab.${config.homelab.domain}" ];
                   }
                 ];
               };
