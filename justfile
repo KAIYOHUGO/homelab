@@ -4,3 +4,7 @@ build HOST:
         --sudo --ask-sudo-password \
         --use-substitutes --no-reexec \
         --flake .
+
+build-all:
+    just build mininas
+    just build rasp4
