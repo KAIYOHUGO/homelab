@@ -30,7 +30,9 @@
 
         staticConfigOptions = {
           api.insecure = true;
-          providers.docker = { };
+          providers.docker = {
+            exposedByDefault = false;
+          };
           entryPoints = {
             web = {
               address = ":80";
