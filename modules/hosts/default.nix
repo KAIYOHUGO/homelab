@@ -1,7 +1,6 @@
 {
   inputs,
   config,
-  options,
   lib,
   ...
 }:
@@ -15,13 +14,7 @@
             config.flake.modules.nixos.base
             config.flake.modules.nixos.${name}
             {
-              # black magic
-              # share global config.homelab into module
-              options.homelab = options.homelab;
-              config = {
-                networking.hostName = name;
-                homelab = config.homelab;
-              };
+              networking.hostName = name;
             }
           ];
         };

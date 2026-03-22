@@ -1,4 +1,4 @@
-{
+top: {
   flake.modules.nixos.rasp4 =
     { config, lib, ... }:
     {
@@ -39,20 +39,20 @@
               let
                 mkServer = host: ip: {
                   ${host} = ip;
-                  "periphery-${host}.${config.homelab.lan-domain}" = ip;
+                  "periphery-${host}.${top.config.homelab.lan-domain}" = ip;
                 };
                 mkMapping = name: host: {
-                  "${name}.${config.homelab.lan-domain}" = config.homelab.servers.${host};
+                  "${name}.${top.config.homelab.lan-domain}" = top.config.homelab.servers.${host};
                 };
               in
               (lib.foldlAttrs (
                 acc: name: value:
                 acc // mkServer name value
-              ) { } config.homelab.servers)
+              ) { } top.config.homelab.servers)
               // (lib.foldlAttrs (
                 acc: name: value:
                 acc // mkMapping name value
-              ) { } config.homelab.mappings);
+              ) { } top.config.homelab.mappings);
           };
           blocking = {
             denylists = {
