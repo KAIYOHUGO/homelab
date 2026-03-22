@@ -1,3 +1,6 @@
+check:
+    nix flake check --no-build
+    
 build HOST:
     nixos-rebuild switch --build-host hugo@{{HOST}} \
         --target-host hugo@{{HOST}} \
