@@ -1,4 +1,4 @@
-{ moduleWithSystem, ... }:
+top@{ moduleWithSystem, ... }:
 {
   flake.modules.nixos.base = moduleWithSystem (
     { inputs', ... }:
@@ -32,7 +32,7 @@
 
       services.traefik.dynamicConfigOptions.http = {
         routers.periphery = {
-          rule = "Host(`periphery-${config.networking.hostName}.${config.homelab.lan-domain}`)";
+          rule = "Host(`periphery-${config.networking.hostName}.${top.config.homelab.lan-domain}`)";
           service = "periphery";
           entrypoints = [
             "web"

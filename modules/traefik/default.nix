@@ -1,4 +1,4 @@
-{
+top: {
   flake.modules.nixos.base =
     {
       lib,
@@ -48,12 +48,12 @@
                 certResolver = "letsencrypt";
                 domains = [
                   {
-                    main = "${config.homelab.domain}";
-                    sans = [ "*.${config.homelab.domain}" ];
+                    main = "${top.config.homelab.domain}";
+                    sans = [ "*.${top.config.homelab.domain}" ];
                   }
                   {
-                    main = "${config.homelab.lan-domain}";
-                    sans = [ "*.${config.homelab.lan-domain}" ];
+                    main = "${top.config.homelab.lan-domain}";
+                    sans = [ "*.${top.config.homelab.lan-domain}" ];
                   }
                 ];
               };
@@ -90,7 +90,7 @@
               };
             };
           };
-          
+
           tls = {
             certificates = [
               {

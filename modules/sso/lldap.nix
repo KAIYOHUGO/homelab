@@ -1,4 +1,6 @@
-{
+top: {
+  homelab.mappings.lldap = "rasp4";
+
   flake.modules.nixos.rasp4 =
     { config, ... }:
     {
@@ -6,20 +8,13 @@
       age.secrets."lldap-key".rekeyFile = ./lldap-key.age;
       age.secrets."lldap-pass".rekeyFile = ./lldap-pass.age;
 
-      networking.firewall = {
-        allowedTCPPorts = [
-          3230
-          3231
-        ];
-      };
-
       services.lldap = {
         enable = true;
 
         settings = {
           ldap_port = 3230;
           http_port = 3231;
-          ldap_base_dn = "dc=homelab, dc=lan";
+          ldap_base_dn = "dc=k9h, dc=uk";
           force_ldap_user_pass_reset = "always";
         };
 
@@ -34,5 +29,26 @@
         "lldap-key:${config.age.secrets."lldap-key".path}"
         "lldap-pass:${config.age.secrets."lldap-pass".path}"
       ];
+
+      services.traefik.dynamicConfigOptions.http = {
+        routers.lldap_http = {
+          rule = "Host(`lldap.${top.config.homelab.lan-domain}`)";
+          service = "lldap_http";
+          entrypoints = [
+            "web"
+            "websecure"
+          ];
+          middlewares = [
+            "lan-only"
+          ];
+        };
+        services.lldap_http = {
+          loadbalancer.servers = [
+            {
+              url = "http://localhost:${toString config.services.lldap.settings.http_port}";
+            }
+          ];
+        };
+      };
     };
 }
