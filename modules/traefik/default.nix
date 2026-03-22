@@ -89,27 +89,8 @@
                 };
               };
             };
-
-            routers.periphery = {
-              rule = "Host(`periphery-${config.networking.hostName}.${config.homelab.lan-domain}`)";
-              service = "periphery";
-              entrypoints = [
-                "web"
-                "websecure"
-              ];
-              middlewares = [
-                "lan-only"
-              ];
-            };
-            services.periphery = {
-              loadbalancer.servers = [
-                {
-                  url = "http://localhost:${toString config.services.komodo-periphery.port}";
-                }
-              ];
-            };
           };
-
+          
           tls = {
             certificates = [
               {
