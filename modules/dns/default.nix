@@ -37,19 +37,22 @@
             };
             mapping =
               let
-                mkMap = host: ip: {
-                  "${host}" = ip;
+                mkServer = host: ip: {
+                  ${host} = ip;
                   "periphery-${host}.${config.homelab.lan-domain}" = ip;
                 };
-                mkMaps = lib.foldlAttrs (
-                  acc: name: value:
-                  acc // mkMap name value
-                ) {};
+                mkMapping = name: host: {
+                  "${name}.${config.homelab.lan-domain}" = config.homelab.servers.${host};
+                };
               in
-              mkMaps {
-                rasp4 = "192.168.1.136";
-                mininas = "192.168.1.215";
-              };
+              (lib.foldlAttrs (
+                acc: name: value:
+                acc // mkServer name value
+              ) { } config.homelab.servers)
+              // (lib.foldlAttrs (
+                acc: name: value:
+                acc // mkMapping name value
+              ) { } config.homelab.mappings);
           };
           blocking = {
             denylists = {

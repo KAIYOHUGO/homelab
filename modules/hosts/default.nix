@@ -1,6 +1,8 @@
 {
   inputs,
   config,
+  options,
+  lib,
   ...
 }:
 {
@@ -13,11 +15,20 @@
             config.flake.modules.nixos.base
             config.flake.modules.nixos.${name}
             {
-              networking.hostName = name;
+              # black magic
+              # share global config.homelab into module
+              options.homelab = options.homelab;
+              config = {
+                networking.hostName = name;
+                homelab = config.homelab;
+              };
             }
           ];
         };
       };
     in
-    (mkNixosConfig "mininas") // (mkNixosConfig "rasp4");
+    lib.foldlAttrs (
+      acc: name: value:
+      acc // mkNixosConfig name
+    ) { } config.homelab.servers;
 }
