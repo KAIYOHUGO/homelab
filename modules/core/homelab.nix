@@ -20,6 +20,12 @@
       default = { };
     };
 
+    # auth rule
+    # see authelia.nix's access_control.rules
+    auths = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      default = [ ];
+    };
   };
   config.homelab = {
     domain = "k9h.uk";
