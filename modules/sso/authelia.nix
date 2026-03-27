@@ -1,5 +1,7 @@
-{
-  homelab.mappings.authelia = "rasp4";
+top: {
+  # bypass cloudflare
+  homelab.overrides.auth = "rasp4";
+
   flake.modules.nixos.rasp4 =
     { config, ... }:
     let

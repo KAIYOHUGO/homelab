@@ -19,13 +19,19 @@
       type = lib.types.attrsOf lib.types.str;
       default = { };
     };
-
-    # auth rule
-    # see authelia.nix's access_control.rules
-    auths = lib.mkOption {
-      type = lib.types.listOf lib.types.attrs;
-      default = [ ];
-    };
+    
+     # auth rule
+     # see authelia.nix's access_control.rules
+     auths = lib.mkOption {
+       type = lib.types.listOf lib.types.attrs;
+       default = [];
+     };
+     # key.${domain} = value(host)
+     # for override dns to bypass cloudflare
+     overrides = lib.mkOption {
+       type = lib.types.attrsOf lib.types.str;
+       default = { };
+     };
   };
   config.homelab = {
     domain = "k9h.uk";

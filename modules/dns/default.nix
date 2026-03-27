@@ -44,6 +44,9 @@ top: {
                 mkMapping = name: host: {
                   "${name}.${top.config.homelab.lan-domain}" = top.config.homelab.servers.${host};
                 };
+                mkOverride = name: host: {
+                  "${name}.${top.config.homelab.domain}" = top.config.homelab.servers.${host};
+                };
               in
               (lib.foldlAttrs (
                 acc: name: value:
@@ -52,7 +55,11 @@ top: {
               // (lib.foldlAttrs (
                 acc: name: value:
                 acc // mkMapping name value
-              ) { } top.config.homelab.mappings);
+              ) { } top.config.homelab.mappings)
+              // (lib.foldlAttrs (
+                acc: name: value:
+                acc // mkOverride name value
+              ) { } top.config.homelab.overrides);
           };
           blocking = {
             denylists = {
