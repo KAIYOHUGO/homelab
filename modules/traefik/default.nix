@@ -96,6 +96,7 @@ top: {
                   }
                 ];
               };
+              transport.respondingTimeouts.readTimeout = "10m";
             };
           };
           certificatesResolvers = {
@@ -126,6 +127,11 @@ top: {
                     "::1/128"
                   ];
                 };
+              };
+              # 100MB (cloudflare limit)
+              large-buf.buffering = {
+                maxRequestBodyBytes = 104857600;
+                memRequestBodyBytes = 104857600;
               };
             };
           };
