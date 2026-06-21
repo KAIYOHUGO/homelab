@@ -9,6 +9,7 @@
 
     {
       age.secrets."komodo-mininas-core.env".rekeyFile = ./mininas-core.env.age;
+      age.secrets."komodo-core.key".rekeyFile = ./core.key.age;
 
       systemd.tmpfiles.settings."10-komodo-core" = {
         "/var/lib/komodo/".d = {

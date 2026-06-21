@@ -13,10 +13,10 @@ top@{ moduleWithSystem, ... }:
         enable = true;
       };
 
-      # only need if enable ssl
-      # environment.systemPackages = with pkgs; [
-      #   openssl
-      # ];
+      # komodo 2 need this
+      environment.systemPackages = with pkgs; [
+        openssl_3
+      ];
 
       age.secrets."komodo.toml" = {
         rekeyFile = ./komodo.toml.age;
@@ -26,8 +26,10 @@ top@{ moduleWithSystem, ... }:
       networking.firewall.trustedInterfaces = [ "br+" ];
       services.komodo-periphery = {
         enable = true;
-        package = inputs'.nixpkgs-stable.legacyPackages.komodo;
         configFile = config.age.secrets."komodo.toml".path;
+        environment = {
+          PERIPHERY_CORE_PUBLIC_KEYS = "file:${./core.pub}";
+        };
       };
 
       services.traefik.dynamicConfigOptions.http = {
