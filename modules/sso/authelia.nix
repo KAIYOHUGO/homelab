@@ -114,6 +114,11 @@ top: {
               "Remote-Email"
               "Remote-Name"
             ];
+            # Fix invaild auth header error
+            # (llumen)
+            authRequestHeaders = [
+              "Cookie"
+            ];
           };
         };
       };
