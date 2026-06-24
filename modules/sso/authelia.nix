@@ -22,8 +22,9 @@ top: {
         };
 
         settings = {
+          log.level = "warn";
           theme = "auto";
-          # ❗ need to be `/avr/lib/authelia-{name}`
+          # ❗ need to be `/var/lib/authelia-{name}`
           storage.local.path = "/var/lib/authelia-homelab/db.sqlite3";
           authentication_backend.ldap = {
             implementation = "lldap";
