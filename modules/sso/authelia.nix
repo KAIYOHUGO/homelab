@@ -15,6 +15,9 @@ top: {
       age.secrets."auth-lldap-pass" = mkAge ./auth-lldap-pass.age;
       age.secrets."auth-jwt" = mkAge ./auth-jwt.age;
       age.secrets."auth-enc" = mkAge ./auth-encryption.age;
+      age.secrets."auth-session" = mkAge ./auth-session.age;
+      age.secrets."auth-oidc-hmac" = mkAge ./auth-oidc-hmac.age;
+      age.secrets."auth-oidc-jwk-key" = mkAge ./auth-oidc-jwk-key.age;
       services.authelia.instances.homelab = {
         enable = true;
         environmentVariables = {
@@ -78,11 +81,44 @@ top: {
 
           server.endpoints.authz.forward-auth.implementation = "ForwardAuth";
           notifier.filesystem.filename = "/var/lib/authelia-homelab/notification.txt";
+          identity_providers = {
+            oidc = {
+              jwks = [
+                {
+                  # The default value
+                  algorithm = "RS256";
+                  use = "sig";
+                }
+              ];
+              clients = [
+                {
+                  client_id = "immich";
+                  client_name = "immich";
+                  client_secret = "$pbkdf2-sha512$310000$Ko97HSYUOkq.ws0DldhQiA$HWamZ7EziyvSFmyYnsEVSUwlSXhqZ4sbnJtnUe2xfSXovrvNcwypzjah8o5d0qvHml3.QAsF21ed89thc6HD5A";
+                  authorization_policy = "one_factor";
+                  redirect_uris = [
+                    "https://immich.${top.config.homelab.domain}/auth/login"
+                    "https://immich.${top.config.homelab.domain}/user-settings"
+                    "app.immich:///oauth-callback"
+                  ];
+                  scopes = [
+                    "openid"
+                    "profile"
+                    "email"
+                  ];
+                  token_endpoint_auth_method = "client_secret_post";
+                }
+              ];
+            };
+
+          };
         };
         secrets = {
           sessionSecretFile = config.age.secrets."auth-session".path;
           jwtSecretFile = config.age.secrets."auth-jwt".path;
           storageEncryptionKeyFile = config.age.secrets."auth-enc".path;
+          oidcHmacSecretFile = config.age.secrets."auth-oidc-hmac".path;
+          oidcIssuerPrivateKeyFile = config.age.secrets."auth-oidc-jwk-key".path;
         };
       };
 
