@@ -59,6 +59,11 @@ top: {
                 authelia_url = "https://auth.${top.config.homelab.domain}";
               }
             ];
+
+            redis = {
+              host = "localhost";
+              port = config.services.redis.servers.authelia.port;
+            };
           };
 
           access_control = {
@@ -74,9 +79,15 @@ top: {
           notifier.filesystem.filename = "/var/lib/authelia-homelab/notification.txt";
         };
         secrets = {
+          sessionSecretFile = config.age.secrets."auth-session".path;
           jwtSecretFile = config.age.secrets."auth-jwt".path;
           storageEncryptionKeyFile = config.age.secrets."auth-enc".path;
         };
+      };
+
+      services.redis.servers.authelia = {
+        enable = true;
+        port = 3240;
       };
 
       services.traefik.dynamicConfigOptions.http = {
