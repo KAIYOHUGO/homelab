@@ -96,7 +96,10 @@ top: {
                   }
                 ];
               };
-              transport.respondingTimeouts.readTimeout = "10m";
+              transport.respondingTimeouts = {
+                readTimeout = "10m";
+                idleTimeout = "10m";
+              };
             };
           };
           certificatesResolvers = {
